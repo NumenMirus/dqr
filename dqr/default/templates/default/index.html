@@ -1,0 +1,63 @@
+{% extends 'default/base.html' %}
+{% load static %}
+
+{% block title %}<title>DQR - Home</title>{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'default/css/index.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div id="loader-wrapper">
+    <div class="loader"></div>
+</div>
+  
+<h1>Home page, welcome to your personal dynamic QRcode generator!</h1>
+
+<h2>Current QRcodes:</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>URL</th>
+    </tr>
+    {% for qrcode in qrcodes %}
+    <tr>
+        <td>{{ qrcode.id }}</td>
+        <td>{{ qrcode.name }}</td>
+        <td><a href="{{ qrcode.url }}">{{ qrcode.url }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<hr>
+<br>
+
+<form action="/addqrcode" method="post">
+    {% csrf_token %}
+    <input type="text" name="x-name" id="x-name">
+    <input type="text" name="x-url" id="x-url">
+    <input type="submit" value="Add">
+</form>
+
+<form action="/deleteqrcode" method="post">
+    {% csrf_token %}
+    <label for="x-id">Available QRcodes</label>
+      <select name="x-id" id="x-id">
+        {% for qrcode in qrcodes %}
+            <option value="{{ qrcode.id }}">{{ qrcode.name }} - {{ qrcode.url }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Delete" />
+</form>
+
+
+<script type="text/javascript">
+    $(window).on('load', function() {
+      $("#loader-wrapper").fadeOut(700);
+    });
+  </script>
+{% endblock %}
