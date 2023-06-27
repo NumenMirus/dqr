@@ -22,7 +22,7 @@ class Qrcode(models.Model):
         )
         qr.add_data("http://michaelbasta.it/dqr/" + self.internal_url)
         qr.make(fit=True)
-        qr_image = qr.make_image(fill_color="black", back_color="white")
+        qr_image = qr.make_image(fill_color="black", back_color="transparent")
         image_url = os.path.join(MEDIA_URL, 'qrcodes/', self.internal_url + '.png')
 
         # Create a BytesIO buffer to hold the image data

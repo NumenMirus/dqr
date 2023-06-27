@@ -19,6 +19,17 @@
 </head>
 <body>
 
+  <!-- NAVBAR START -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand-start" href="#">
+        <img src="{% static 'default/images/dqr.png' %}" alt="Logo" height="50" class="d-inline-block align-text-top">
+      </a>
+      <a href="{% url 'logout' %}"><button class="btn btn-primary">Logout</button></a>
+    </div>
+  </nav>
+  <!-- NAVBAR END -->
+
   {% block body %}{% endblock %}
 
 </body>

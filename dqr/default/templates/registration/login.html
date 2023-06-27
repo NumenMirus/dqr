@@ -1,0 +1,30 @@
+{% extends 'default/base.html' %}
+{% load static %}
+
+{% block title %}<title>DQR - Login</title>{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'default/css/login.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div class="spacer"></div>
+<div class="row">
+  <div class="col" id="form-col">
+    <h2>Log In</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="id_username">Username:</label>
+        <input class="form-control" type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+        <label for="id_password">Password:</label>
+        <input class="form-control" type="password" name="password" autocomplete="current-password" required="" id="id_password">
+        <input class="form-control" type="submit" value="Login">
+    </form>
+  </div>
+</div>
+
+
+
+{% endblock %}
+

@@ -5,6 +5,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'default/css/index.css' %}">
+<script src="{% static 'default/js/index.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -13,67 +14,118 @@
     <div class="loader"></div>
 </div>
   
-<h1>Home page, welcome to your personal dynamic QRcode generator!</h1>
+<div class="spacer"></div>
 
-<h2>Current QRcodes:</h2>
+<div class="container" id="main-container">
+  <div class="row">
+    <div class="col">
+      <h1>Hello {{ user.username }}, welcome to DRQ!</h1>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="row">
+    <div class="col">
+      <h2>Current active DQRcodes:</h2>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="row w-100">
+    <div class="col">
+      <table class="table">
+        <tr>
+            <th>NAME</th>
+            <th>URL</th>
+            <th>MODIFIED</th>
+            <th>IMAGE</th>
+        </tr>
+      </table>
+        
+        <div class="accordion w-100" id="accordionExample">
+          {% for qrcode in qrcodes %}
 
-<table class="table">
-    <tr>
-        <th>ID</th>
-        <th>NAME</th>
-        <th>INTERNAL URL</th>
-        <th>EXTERNAL URL</th>
-        <th>MODIFIED</th>
-        <th>IMAGE</th>
-    </tr>
-    {% for qrcode in qrcodes %}
-    <tr>
-        <td>{{ qrcode.id }}</td>
-        <td>{{ qrcode.name }}</td>
-        <td><a href="{% url 'redirect_to_external_url' qrcode.internal_url %}">{{ qrcode.internal_url }}</a></td>
-        <td><a href="{{ qrcode.external_url }}">{{ qrcode.external_url }}</a></td>
-        <td>{{ qrcode.modified }}</td>
-        {% if qrcode.image %}
-          <td><img src="{{ qrcode.image.url }}" alt="QRcode Image" height="100"></td>
-        {% endif %}
-    </tr>
-    {% endfor %}
-</table>
+          <div class="accordion-item w-100">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                <table class="w-100">
+                  <tr>
+                      <td>{{ qrcode.name }}</td>
+                      <td><a href="{{ qrcode.external_url }}">{{ qrcode.external_url }}</a></td>
+                      <td>{{ qrcode.modified }}</td>
+                      {% if qrcode.image %}
+                        <td><a href="{{ qrcode.image.url }}" download=""><img src="{{ qrcode.image.url }}" alt="QRcode Image" height="100"></a></td>
+                      {% endif %}
+                  </tr>
+                  </table>
+              </button>
+            </h2>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
 
-<br>
-<hr>
-<br>
+                <div class="row">   
+                  <div class="col">
+                    <h3>Modify DQRcode</h3>
+                    <form action="/modifyqrcode" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ qrcode.id }}" name="x-id">
+                        <input class="form-control" type="text"  placeholder="Change name" name="x-name">
+                        <input class="form-control" type="text"  placeholder="Change URL" name="x-url">
+                        <input class="form-control" type="submit" value="Change" />
+                    </form>
+                  </div>
+                  <div class="col">
+                    <h3>Upload custom image</h3>
+                    <form action="" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" value="{{ qrcode.id }}" name="x-id">
+                      <input class="form-control" type="file" name="x-image">
+                      <input class="form-control" type="submit" value="Change">
+                    </form>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <form action="/deleteqrcode" method="post">
+                          {% csrf_token %}
+                          <input type="hidden" value="{{ qrcode.id }}" name="x-id">
+                          <input class="form-control" type="submit" value="Delete" style="background-color: red; color: white; font-weight: bolder;"/>
+                    </form>
+                    </div>
+                  </div>
+                </div>
 
-<form action="/addqrcode" method="post">
-    {% csrf_token %}
-    <input type="text" name="x-name" id="x-name">
-    <input type="text" name="x-url" id="x-url">
-    <input type="submit" value="Add">
-</form>
+              </div>
+            </div>
+          </div>
 
-<form action="/deleteqrcode" method="post">
-    {% csrf_token %}
-    <label for="x-id">Available QRcodes</label>
-      <select name="x-id" id="x-id">
-        {% for qrcode in qrcodes %}
-            <option value="{{ qrcode.id }}">{{ qrcode.name }} - {{ qrcode.url }}</option>
         {% endfor %}
-      </select>
-      <input type="submit" value="Delete" />
-</form>
+        </div>
 
-<form action="/modifyqrcode" method="post">
-  {% csrf_token %}
-  <label for="x-id">Available QRcodes</label>
-    <select name="x-id" id="x-id">
-      {% for qrcode in qrcodes %}
-          <option value="{{ qrcode.id }}">{{ qrcode.name }} - {{ qrcode.url }}</option>
-      {% endfor %}
-    </select>
-    <input type="text" name="x-name">
-    <input type="text" name="x-url">
-    <input type="submit" value="Change" />
-</form>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  
+  <div class="row">
+    <div class="col">
+      <h3>Create new DQRcode</h3>
+      <form action="/addqrcode" method="post">
+        {% csrf_token %}
+        <input class="form-control" placeholder="Name" type="text" name="x-name" id="x-name">
+        <input class="form-control" placeholder="URL" type="text" name="x-url" id="x-url">
+        <input class="form-control" type="submit" value="Add">
+      </form>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+<div class="spacer"></div>
+<div class="spacer"></div>
+<div class="spacer"></div>
 
 <script type="text/javascript">
     $(window).on('load', function() {
