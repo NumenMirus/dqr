@@ -1,7 +1,8 @@
+import random
 from django.shortcuts import redirect, render
 from default.models import *
-import hashlib
-import qrcode as qrcode_maker
+import string
+
 
 # Create your views here.
 def index(request):
@@ -18,12 +19,10 @@ def addqrcode(request):
         new_qrcode.name = request.POST['x-name']
         new_qrcode.external_url = url
         
-        # Hash the url
-        sha256_hash = hashlib.sha256()
-        sha256_hash.update(url.encode('utf-8'))
-        hashed_url = sha256_hash.hexdigest()
-        new_qrcode.internal_url = hashed_url # "http://michaelbasta.it/dqr/" + hashed_url
+        letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+        new_qrcode.internal_url = ''.join(random.choice(letters) for i in range(50)) # 50 character random string
 
+        new_qrcode.make_qrcode()
         new_qrcode.save()
 
 
