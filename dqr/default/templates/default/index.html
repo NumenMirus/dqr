@@ -21,13 +21,21 @@
     <tr>
         <th>ID</th>
         <th>NAME</th>
-        <th>URL</th>
+        <th>INTERNAL URL</th>
+        <th>EXTERNAL URL</th>
+        <th>MODIFIED</th>
+        <th>IMAGE</th>
     </tr>
     {% for qrcode in qrcodes %}
     <tr>
         <td>{{ qrcode.id }}</td>
         <td>{{ qrcode.name }}</td>
-        <td><a href="{{ qrcode.url }}">{{ qrcode.url }}</a></td>
+        <td><a href="{% url 'redirect_to_external_url' qrcode.internal_url %}">{{ qrcode.internal_url }}</a></td>
+        <td><a href="{{ qrcode.external_url }}">{{ qrcode.external_url }}</a></td>
+        <td>{{ qrcode.modified }}</td>
+        {% if qrcode.image %}
+          <td><img src="{{ qrcode.image.url }}" alt="QRcode image"></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
@@ -54,6 +62,18 @@
       <input type="submit" value="Delete" />
 </form>
 
+<form action="/modifyqrcode" method="post">
+  {% csrf_token %}
+  <label for="x-id">Available QRcodes</label>
+    <select name="x-id" id="x-id">
+      {% for qrcode in qrcodes %}
+          <option value="{{ qrcode.id }}">{{ qrcode.name }} - {{ qrcode.url }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" name="x-name">
+    <input type="text" name="x-url">
+    <input type="submit" value="Change" />
+</form>
 
 <script type="text/javascript">
     $(window).on('load', function() {
