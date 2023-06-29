@@ -40,7 +40,6 @@ def deleteqrcode(request):
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-@login_required
 def redirect_to_external_url(request, internal_url):
     qrcode = Qrcode.objects.get(internal_url=internal_url)
     return redirect(qrcode.external_url)
