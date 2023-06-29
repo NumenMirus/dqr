@@ -129,7 +129,6 @@ MEDIA_ROOT = './appmedia'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # django login
-LOGIN_REDIRECT_URL = "dqr/"
-LOGOUT_REDIRECT_URL = "dqr/"
-LOGIN_URL = "dqr/login"
-LOGOUT_URL = "dqr/logout"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/login"
+LOGOUT_URL = "/logout"
