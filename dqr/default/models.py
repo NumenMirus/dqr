@@ -20,7 +20,7 @@ class Qrcode(models.Model):
             box_size=10,
             border=4,
         )
-        qr.add_data("http://michaelbasta.it/dqr/" + self.internal_url)
+        qr.add_data("http://michaelbasta.it/dqr/redirect?" + self.internal_url)
         qr.make(fit=True)
         qr_image = qr.make_image(fill_color="black", back_color="transparent")
         image_url = os.path.join(MEDIA_URL, 'qrcodes/', self.internal_url + '.png')

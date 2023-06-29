@@ -24,11 +24,10 @@ def addqrcode(request):
         new_qrcode.external_url = url
         
         letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
-        new_qrcode.internal_url = ''.join(random.choice(letters) for i in range(50)) # 50 character random string
+        new_qrcode.internal_url = ''.join(random.choice(letters) for _ in range(50)) # 50 character random string
 
         new_qrcode.make_qrcode()
         new_qrcode.save()
-
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 

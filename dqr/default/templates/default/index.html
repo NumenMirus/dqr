@@ -64,7 +64,7 @@
                 <div class="row">   
                   <div class="col">
                     <h3>Modify DQRcode</h3>
-                    <form action="/modifyqrcode" method="post">
+                    <form action="{% url 'modifyqrcode' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" value="{{ qrcode.id }}" name="x-id">
                         <input class="form-control" type="text"  placeholder="Change name" name="x-name">
@@ -83,7 +83,7 @@
                   </div>
                   <div class="row">
                     <div class="col">
-                      <form action="/deleteqrcode" method="post">
+                      <form action="{% url 'deleteqrcode' %}" method="post">
                           {% csrf_token %}
                           <input type="hidden" value="{{ qrcode.id }}" name="x-id">
                           <input class="form-control" type="submit" value="Delete" style="background-color: red; color: white; font-weight: bolder;"/>
@@ -107,7 +107,7 @@
   <div class="row">
     <div class="col">
       <h3>Create new DQRcode</h3>
-      <form action="/addqrcode" method="post">
+      <form action="{% url 'addqrcode' %}" method="post">
         {% csrf_token %}
         <input class="form-control" placeholder="Name" type="text" name="x-name" id="x-name">
         <input class="form-control" placeholder="URL" type="text" name="x-url" id="x-url">
