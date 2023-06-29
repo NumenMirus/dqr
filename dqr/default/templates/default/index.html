@@ -52,7 +52,7 @@
                       <td><a href="{{ qrcode.external_url }}">{{ qrcode.external_url }}</a></td>
                       <td>{{ qrcode.modified }}</td>
                       {% if qrcode.image %}
-                        <td><a href="{{ qrcode.image.url }}" download=""><img src="{{ qrcode.image.url }}" alt="QRcode Image" height="100"></a></td>
+                        <td><a href="/media/{{ qrcode.image.url }}" download=""><img src="/media/{{ qrcode.image.url }}" alt="QRcode Image" height="100"></a></td>
                       {% endif %}
                   </tr>
                   </table>
